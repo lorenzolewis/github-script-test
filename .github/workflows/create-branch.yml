@@ -23,6 +23,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Runs a set of commands using the runners shell
+      - name: Check if branch exists
+        uses: actions/github-script@v6
+        id: branch-exists
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const result = await github.rest.git.getRef({
+              owner,
+              repo, 
+              ref: "refs/heads/i18n-preview"
+            )}
+      - name: Print results
+        run: echo "${{ steps.branch-exists.outputs.result }}"
+            
       - name: Create branch
         uses: actions/github-script@v6
         with:
