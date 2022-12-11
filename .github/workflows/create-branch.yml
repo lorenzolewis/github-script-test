@@ -45,22 +45,19 @@ jobs:
         with:
           script: |
             const { repo, owner } = context.repo;
-            const branchExists = await github.rest.git.getRef({
-              owner, repo, ref: "${{ env.I18N_BRANCH }}"
-            });
-            
-            console.log(branchExists);
-            
-#       - name: Create pull request
-#         uses: actions/github-script@v6
-#         with:
-#           script: |
-#             const { repo, owner } = context.repo;
-#             const result = await github.rest.pulls.create({
-#               owner,
-#               repo,
-#               title: 'i18n Preview',
-#               head: 'i18n-preview',
-#               base: '${{ github.ref_name }}',
-#               draft: true
-#             });
+            try {
+              await github.rest.git.getRef({
+                owner, repo, ref: "${{ env.I18N_BRANCH }}"
+              });
+            } catch (error) {
+              if (error.name === 'HttpError' && error.status === 404) {
+                await github.rest.pulls.create({
+                owner,
+                repo,
+                title: 'i18n Preview',
+                head: 'i18n-preview',
+                base: '${{ github.ref_name }}',
+                draft: true
+              });
+            }
+
