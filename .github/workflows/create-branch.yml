@@ -22,6 +22,7 @@ jobs:
     steps:
       # Runs a set of commands using the runners shell
       - name: Check if branch exists
+        continue-on-error: true
         uses: actions/github-script@v6
         id: branch-exists
         with:
