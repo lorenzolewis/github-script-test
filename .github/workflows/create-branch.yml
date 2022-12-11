@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check for ref
+        continue-on-error: true
         uses: actions/github-script@v6
         with:
           script: |
