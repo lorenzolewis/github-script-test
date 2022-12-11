@@ -41,6 +41,7 @@ runs:
             ref: "refs/heads/${{ inputs.branch-name }}",
             sha: context.sha
           })
+
     - name: Update branch
       if: steps.check.outcome == 'success'
       uses: actions/github-script@v6
