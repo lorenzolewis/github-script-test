@@ -36,6 +36,6 @@ runs:
           github.rest.pulls.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            head: ${{ inputs.head }},
-            base: ${{ inputs.base }},
+            head: "${{ inputs.head }}",
+            base: "${{ inputs.base }}",
           });
