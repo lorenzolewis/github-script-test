@@ -32,12 +32,16 @@ jobs:
               await github.rest.git.getRef({
                 owner, repo, ref: '${{ env.I18N_BRANCH }}'
               });
+              console.log("Found existing branch");
             } catch (error) {
-              console.log(error)
               if (error.name === 'HttpError' && error.status === 422) {
+                console.log("No branch found, creating a new one...");
                 await github.rest.git.createRef({
                   owner, repo, ref: 'refs/heads/${{ env.I18N_BRANCH }}', sha: context.sha
                 });
+                console.log("New branch created")
+              } else {
+                console.log("An unexpected error occured:", error)
               };
             };
 
