@@ -22,24 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Runs a set of commands using the runners shell
-#       - name: Check if branch exists
-#         continue-on-error: true
-#         uses: actions/github-script@v6
-#         id: branch-exists
-#         with:
-#           result-encoding: string
-#           script: |
-#             const { repo, owner } = context.repo;
-#             const result = await github.rest.git.getRef({
-#               owner,
-#               repo, 
-#               ref: "heads/i18n-preview"
-#             });
-#       - name: Print results
-#         run: echo "${{ steps.branch-exists.outputs.result }}"
-            
+    steps:           
       - name: Create branch
         uses: actions/github-script@v6
         with:
@@ -47,17 +30,18 @@ jobs:
             const { repo, owner } = context.repo;
             try {
               await github.rest.git.getRef({
-                owner, repo, ref: "${{ env.I18N_BRANCH }}"
+                owner, repo, ref: '${{ env.I18N_BRANCH }}'
               });
             } catch (error) {
               if (error.name === 'HttpError' && error.status === 404) {
                 await github.rest.pulls.create({
-                owner,
-                repo,
-                title: 'i18n Preview',
-                head: 'i18n-preview',
-                base: '${{ github.ref_name }}',
-                draft: true
-              });
-            }
+                  owner,
+                  repo,
+                  title: 'i18n Preview',
+                  head: '${{ env.I18N_BRANCH }}',
+                  base: '${{ github.ref_name }}',
+                  draft: true
+                });
+              };
+            };
 
