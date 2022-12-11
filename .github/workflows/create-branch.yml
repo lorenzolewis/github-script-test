@@ -35,7 +35,7 @@ jobs:
             } catch (error) {
               if (error.name === 'HttpError' && error.status === 404) {
                 await github.rest.git.createRef({
-                  owner, repo, ref: '${{ env.I18N_BRANCH }}', sha: context.sha
+                  owner, repo, ref: 'refs/heads/${{ env.I18N_BRANCH }}', sha: context.sha
                 });
               };
             };
