@@ -33,3 +33,14 @@ jobs:
               ref: "refs/heads/${{env.BRANCH}}",
               sha: context.sha
             });
+      - name: Update branch
+        if: steps.check.outcome == 'success'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.updateRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/heads/${{env.BRANCH}}",
+              sha: context.sha
+            });
