@@ -11,13 +11,12 @@ jobs:
   create-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Create branch
+      - name: Check for ref
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.git.updateRef({
+            github.rest.git.getRef({
               owner: context.owner,
               repo: context.repo,
-              ref: "refs/heads/${{ env.I18N_BRANCH }}",
-              sha: context.sha
-            })
+              ref: "heads/${{ env.I18N_BRANCH }}",
+            });
