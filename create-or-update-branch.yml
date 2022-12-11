@@ -1,4 +1,4 @@
-name: "Create and Update Branch"
+name: "Create or Update Branch"
 description: "Create a new branch or update an existing one"
 
 inputs:
