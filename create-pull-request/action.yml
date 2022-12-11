@@ -1,0 +1,41 @@
+name: "Create Pull Request"
+description: "Creates a Pull Request against a repo"
+
+inputs:
+  head:
+    description: "Head of the PR being merged from"
+    required: true
+    type: string
+  base:
+    description: "Base of the PR being merged into"
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    # This is required since GitHub does not force required inputs
+    # https://github.com/actions/runner/issues/1070
+    - name: Validate input
+      if: ${{ inputs.head == '' }}
+      uses: actions/github-script@v6
+      with:
+        script: core.setFailed('The `head` input is required')
+    - name: Validate input
+      if: ${{ inputs.base == '' }}
+      uses: actions/github-script@v6
+      with:
+        script: core.setFailed('The `base` input is required')
+
+    - name: Create Pull Request
+      # id: check
+      # continue-on-error: true
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.pulls.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            head: ${{ inputs.head }},
+            base: ${{ inputs.base }},
+          });
