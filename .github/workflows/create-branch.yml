@@ -7,9 +7,9 @@ env:
 
 # Controls when the workflow will run
 on:
-# Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,28 +22,14 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:           
+    steps:
+      - uses: actions/checkout@v2
       - name: Create branch
         uses: actions/github-script@v6
         with:
           script: |
-            const { repo, owner } = context.repo;
-            try {
-              await github.rest.git.getRef({
-                owner, repo, ref: '${{ env.I18N_BRANCH }}'
-              });
-              console.log("Found existing branch");
-            } catch (error) {
-              if (error.name === 'HttpError' && error.status === 422) {
-                console.log("No branch found, creating a new one...");
-                await github.rest.git.createRef({
-                  owner, repo, ref: 'refs/heads/${{ env.I18N_BRANCH }}', sha: context.sha
-                });
-                console.log("New branch created")
-              } else {
-                console.log("An unexpected error occured:", error)
-              };
-            };
+            const script = require('./.scripts/create-branch.js')
+            await script({github, context})
 
 # await github.rest.pulls.create({
 #                   owner,
