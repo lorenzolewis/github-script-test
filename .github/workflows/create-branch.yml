@@ -34,14 +34,17 @@ jobs:
               });
             } catch (error) {
               if (error.name === 'HttpError' && error.status === 404) {
-                await github.rest.pulls.create({
-                  owner,
-                  repo,
-                  title: 'i18n Preview',
-                  head: '${{ env.I18N_BRANCH }}',
-                  base: '${{ github.ref_name }}',
-                  draft: true
+                await github.rest.git.createRef({
+                  owner, repo, ref: '${{ env.I18N_BRANCH }}', sha: context.sha
                 });
               };
             };
 
+# await github.rest.pulls.create({
+#                   owner,
+#                   repo,
+#                   title: 'i18n Preview',
+#                   head: '${{ env.I18N_BRANCH }}',
+#                   base: '${{ github.ref_name }}',
+#                   draft: true
+#                 });
