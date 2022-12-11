@@ -1,6 +1,6 @@
 name: CI
 env:
-  BRANCH: i18n-preview
+  BRANCH: test-branch
 
 on:
   workflow_dispatch:
