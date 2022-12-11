@@ -13,7 +13,7 @@ runs:
     # This is required since GitHub does not force required inputs
     # https://github.com/actions/runner/issues/1070
     - name: Validate input
-      if: ${{ inputs.branch-name == "" }}
+      if: ${{ inputs.branch-name == '' }}
       uses: actions/github-script@v6
       with:
         script: core.setFailed('The `branch-name` input is required')
