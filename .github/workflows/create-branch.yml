@@ -33,32 +33,32 @@ jobs:
               owner,
               repo, 
               ref: "refs/heads/i18n-preview"
-            )}
+            });
       - name: Print results
         run: echo "${{ steps.branch-exists.outputs.result }}"
             
-      - name: Create branch
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const result = await github.rest.git.createRef({
-              owner,
-              repo,
-              ref: "refs/heads/i18n-preview",
-              sha: context.sha
-            });
+#       - name: Create branch
+#         uses: actions/github-script@v6
+#         with:
+#           script: |
+#             const { repo, owner } = context.repo;
+#             const result = await github.rest.git.createRef({
+#               owner,
+#               repo,
+#               ref: "refs/heads/i18n-preview",
+#               sha: context.sha
+#             });
             
-      - name: Create pull request
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { repo, owner } = context.repo;
-            const result = await github.rest.pulls.create({
-              owner,
-              repo,
-              title: 'i18n Preview',
-              head: 'i18n-preview',
-              base: '${{ github.ref_name }}',
-              draft: true
-            });
+#       - name: Create pull request
+#         uses: actions/github-script@v6
+#         with:
+#           script: |
+#             const { repo, owner } = context.repo;
+#             const result = await github.rest.pulls.create({
+#               owner,
+#               repo,
+#               title: 'i18n Preview',
+#               head: 'i18n-preview',
+#               base: '${{ github.ref_name }}',
+#               draft: true
+#             });
