@@ -1,0 +1,43 @@
+name: "Create and Update Branch"
+description: "Create a new branch or update an existing one"
+inputs:
+  branch-name:
+    description: "Name of the branch to create"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check for branch
+      id: check
+      continue-on-error: true
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.git.getRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "heads/${{ inputs.branch-name }}",
+          });
+    - name: Create branch
+      if: steps.check.outcome != 'success'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/heads/${{ inputs.branch-name }}",
+            sha: context.sha
+          });
+    - name: Update branch
+      if: steps.check.outcome == 'success'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.git.updateRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "heads/${{ inputs.branch-name }}",
+            sha: context.sha
+          });
