@@ -1,6 +1,6 @@
 name: CI
 env:
-  I18N_BRANCH: i18n-preview
+  BRANCH: i18n-preview
 
 on:
   workflow_dispatch:
@@ -11,7 +11,8 @@ jobs:
   create-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Check for ref
+      - name: Check for branch
+        id: check
         continue-on-error: true
         uses: actions/github-script@v6
         with:
@@ -19,5 +20,16 @@ jobs:
             github.rest.git.getRef({
               owner: context.owner,
               repo: context.repo,
-              ref: "heads/${{ env.I18N_BRANCH }}",
+              ref: "heads/${{ env.BRANCH }}",
             });
+      - name: Create branch
+        if: steps.check.outcome != 'success'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.owner,
+              repo: context.repo,
+              ref: "refs/heads/${{ env.BRANCH }}",
+              sha: context.sha
+            })
