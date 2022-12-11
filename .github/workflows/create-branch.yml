@@ -3,7 +3,7 @@
 name: CI
 
 env:
-  I18N_BRANCH: "i18n-preview"
+  I18N_BRANCH: i18n-preview
 
 # Controls when the workflow will run
 on:
@@ -46,7 +46,7 @@ jobs:
           script: |
             const { repo, owner } = context.repo;
             const branchExists = await github.rest.git.getRef({
-              owner, repo, ref: ${{ env.I18N_BRANCH }}
+              owner, repo, ref: "${{ env.I18N_BRANCH }}"
             });
             
             console.log(branchExists);
