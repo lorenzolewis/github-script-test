@@ -1,9 +1,11 @@
 name: "Create and Update Branch"
 description: "Create a new branch or update an existing one"
+
 inputs:
   branch-name:
     description: "Name of the branch to create"
     required: true
+    type: string
 
 runs:
   using: "composite"
