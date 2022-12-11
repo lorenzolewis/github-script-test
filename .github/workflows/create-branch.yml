@@ -18,6 +18,6 @@ jobs:
             github.rest.git.updateRef({
               owner: context.owner,
               repo: context.repo,
-              ref: "refs/heads/${{ env.I18N_BRANCH }}"
+              ref: "refs/heads/${{ env.I18N_BRANCH }}",
               sha: context.sha
             })
