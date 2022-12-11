@@ -10,10 +10,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # This is required since GitHub does not force required inputs
+    # https://github.com/actions/runner/issues/1070
     - name: Validate input
-      run: |
-        [[ "${{ inputs.branch-name }}" ]] || { echo "Input is not valid" ; exit 1; }
-      shell: bash
+      if: ${{ inputs.branch-name === "" }}
+      uses: actions/github-script@v6
+      with:
+        script: core.setFailed('The `branch-name` input is required')
+
     - name: Check for branch
       id: check
       continue-on-error: true
@@ -25,6 +29,7 @@ runs:
             repo: context.repo.repo,
             ref: "heads/${{ inputs.branch-name }}",
           });
+
     - name: Create branch
       if: steps.check.outcome != 'success'
       uses: actions/github-script@v6
@@ -35,7 +40,7 @@ runs:
             repo: context.repo.repo,
             ref: "refs/heads/${{ inputs.branch-name }}",
             sha: context.sha
-          });
+          })
     - name: Update branch
       if: steps.check.outcome == 'success'
       uses: actions/github-script@v6
