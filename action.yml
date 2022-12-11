@@ -10,6 +10,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Validate input
+      run: |
+        [[ "${{ inputs.branch-name }}" ]] || { echo "Input is not valid" ; exit 1; }
+      shell: bash
     - name: Check for branch
       id: check
       continue-on-error: true
